@@ -1,0 +1,13 @@
+#
+# GnUeFtwPkg - https://github.com/cecekpawon/GnUeFtwPkg
+# cecekpawon - Wed Aug 14 15:57:45 2019
+#
+
+[Defines]
+  DEC_SPECIFICATION = 0x00010005
+  PACKAGE_NAME      = GnUeFtwPkg
+  PACKAGE_GUID      = F37C0877-7A5B-4999-A01E-26E2EF7740DD
+  PACKAGE_VERSION   = 0.1
+
+[Includes]
+  Include
