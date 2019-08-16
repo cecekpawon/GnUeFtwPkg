@@ -65,7 +65,7 @@ off_t json_listdir(char *d, int *dt, int *ft, u_long lev, dev_t dev)
 
   if (xdev && lev == 0) {
     stat(d,&sb);
-    dev = sb.st_dev;
+    //dev = sb.st_dev;
   }
 
   sav = dir = read_dir(d,&n);
@@ -84,7 +84,7 @@ off_t json_listdir(char *d, int *dt, int *ft, u_long lev, dev_t dev)
     return 0;
   }
 
-  if (cmpfunc) qsort(dir,n,sizeof(struct _info *),cmpfunc);
+  //if (cmpfunc) qsort(dir,n,sizeof(struct _info *),cmpfunc);
   if (lev >= maxdirs-1) {
     dirs = xrealloc(dirs,sizeof(int) * (maxdirs += 1024));
     memset(dirs+(maxdirs-1024), 0, sizeof(int) * 1024);

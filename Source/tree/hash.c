@@ -54,6 +54,7 @@ char *uidtoname(uid_t uid)
 
 char *gidtoname(gid_t gid)
 {
+  #if 0
   struct xtable *o, *p, *t;
   struct group *ent;
   char gbuf[32];
@@ -77,6 +78,8 @@ char *gidtoname(gid_t gid)
   if (p == gtable[gent]) gtable[gent] = t;
   else o->nxt = t;
   return t->name;
+  #endif
+  return NULL;
 }
 
 /* Record inode numbers of followed sym-links to avoid refollowing them */

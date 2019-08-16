@@ -32,7 +32,21 @@
 #include <unistd.h>
 #include <limits.h>
 #include <pwd.h>
-#include <grp.h>
+//#include <grp.h>
+
+#ifndef  S_IFCHR
+#define  S_IFCHR   0020000    /* character special */
+#endif
+
+#ifndef  S_IFLNK
+#define  S_IFLNK   0120000    /* symbolic link */
+#endif
+
+#ifndef  S_ISVTX
+#define  S_ISVTX   0001000    /* save swapped text even after use */
+#endif
+
+
 #ifdef __EMX__  /* for OS/2 systems */
 #  define INCL_DOSFILEMGR
 #  define INCL_DOSNLS

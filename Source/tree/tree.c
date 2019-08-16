@@ -55,7 +55,7 @@ const u_short ifmt[]={ FILE_ARCHIVED, FILE_DIRECTORY, FILE_SYSTEM, FILE_HIDDEN, 
   const char fmt[] = "-dlcbspDP?";
   const char *ftype[] = {"file", "directory", "link", "char", "block", "socket", "fifo", "door", "port", "unknown", NULL};
   #else
-  const u_int ifmt[] = {S_IFREG, S_IFDIR, S_IFLNK, S_IFCHR, S_IFBLK, S_IFSOCK, S_IFIFO, 0};
+  const /*u_int*/int ifmt[] = {S_IFREG, S_IFDIR, S_IFLNK, S_IFCHR, S_IFBLK, S_IFSOCK, S_IFIFO, 0};
   const char fmt[] = "-dlcbsp?";
   const char *ftype[] = {"file", "directory", "link", "char", "block", "socket", "fifo", "unknown", NULL};
   #endif
@@ -532,7 +532,7 @@ int main(int argc, char **argv)
 	} while (j > 1 && dirname[i][j-1] == '/');
       }
       if ((n = lstat(dirname[i],&st)) >= 0) {
-	saveino(st.st_ino, st.st_dev);
+	//saveino(st.st_ino, st.st_dev);
 	if (colorize) colored = color(st.st_mode,dirname[i],n<0,FALSE);
 	size += st.st_size;
       }
@@ -563,7 +563,7 @@ int main(int argc, char **argv)
     }
   } else {
     if ((n = lstat(".",&st)) >= 0) {
-      saveino(st.st_ino, st.st_dev);
+      //saveino(st.st_ino, st.st_dev);
       if (colorize) colored = color(st.st_mode,".",n<0,FALSE);
       size = st.st_size;
     }
@@ -719,27 +719,44 @@ struct _info **read_dir(char *dir, int *n)
   dl = (struct _info **)xmalloc(sizeof(struct _info *) * (ne = MINIT));
 
   while((ent = (struct dirent *)readdir(d))) {
-    if (!strcmp("..",ent->d_name) || !strcmp(".",ent->d_name)) continue;
-    if (Hflag && !strcmp(ent->d_name,"00Tree.html")) continue;
-    if (!aflag && ent->d_name[0] == '.') continue;
+    wchar_t   *uname;
+    //size_t    len;
+    char      *aname;
 
-    if (strlen(dir)+strlen(ent->d_name)+2 > pathsize) path = xrealloc(path,pathsize=(strlen(dir)+strlen(ent->d_name)+4096));
-    sprintf(path,"%s/%s",dir,ent->d_name);
+    uname = ent->d_name;
+    len   = wcslen (uname) + 1;
+
+    if ((aname = malloc (len)) != NULL) {
+      if (wcstombs (aname, uname, len) == -1) {
+        free (aname);
+        continue;
+      }
+
+      //entries[entry_idx++] = aname;
+    }
+
+
+    if (!strcmp("..",aname/*ent->d_name*/) || !strcmp(".",aname/*ent->d_name*/)) continue;
+    //if (Hflag && !strcmp(aname/*ent->d_name*/,"00Tree.html")) continue;
+    if (!aflag && aname/*ent->d_name*/[0] == '.') continue;
+
+    if (strlen(dir)+strlen(aname/*ent->d_name*/)+2 > pathsize) path = xrealloc(path,pathsize=(strlen(dir)+strlen(aname/*ent->d_name*/)+4096));
+    sprintf(path,"%s/%s",dir,aname/*ent->d_name*/);
     if (lstat(path,&lst) < 0) continue;
     if ((lst.st_mode & S_IFMT) == S_IFLNK) {
       if ((rs = stat(path,&st)) < 0) memset(&st, 0, sizeof(st));
     } else {
       rs = 0;
       st.st_mode = lst.st_mode;
-      st.st_dev = lst.st_dev;
-      st.st_ino = lst.st_ino;
+      //st.st_dev = lst.st_dev;
+      //st.st_ino = lst.st_ino;
     }
 
 #ifndef __EMX__
     if ((lst.st_mode & S_IFMT) != S_IFDIR && !(lflag && ((st.st_mode & S_IFMT) == S_IFDIR))) {
-      if (pattern && patmatch(ent->d_name,pattern) != 1) continue;
+      if (pattern && patmatch(aname/*ent->d_name*/,pattern) != 1) continue;
     }
-    if (ipattern && patmatch(ent->d_name,ipattern) == 1) continue;
+    if (ipattern && patmatch(aname/*ent->d_name*/,ipattern) == 1) continue;
 #endif
 
     if (dflag && ((st.st_mode & S_IFMT) != S_IFDIR)) continue;
@@ -750,34 +767,37 @@ struct _info **read_dir(char *dir, int *n)
     if (p == (ne-1)) dl = (struct _info **)xrealloc(dl,sizeof(struct _info *) * (ne += MINC));
     dl[p] = (struct _info *)xmalloc(sizeof(struct _info));
 
-    dl[p]->name = scopy(ent->d_name);
+    //dl[p]->name = scopy(ent->d_name);
+    dl[p]->name = aname;
     /* We should just incorporate struct stat into _info, and elminate this unecessary copying.
      * Made sense long ago when we had fewer options and didn't need half of stat.
      */
     dl[p]->mode = lst.st_mode;
-    dl[p]->uid = lst.st_uid;
-    dl[p]->gid = lst.st_gid;
+    //dl[p]->uid = lst.st_uid;
+    //dl[p]->gid = lst.st_gid;
     dl[p]->size = lst.st_size;
-    dl[p]->dev = st.st_dev;
-    dl[p]->inode = st.st_ino;
-    dl[p]->ldev = lst.st_dev;
-    dl[p]->linode = lst.st_ino;
+    //dl[p]->dev = st.st_dev;
+    //dl[p]->inode = st.st_ino;
+    //dl[p]->ldev = lst.st_dev;
+    //dl[p]->linode = lst.st_ino;
     dl[p]->lnk = NULL;
     dl[p]->orphan = FALSE;
     dl[p]->err = NULL;
     dl[p]->child = NULL;
 
     dl[p]->atime = lst.st_atime;
-    dl[p]->ctime = lst.st_ctime;
+    //dl[p]->ctime = lst.st_ctime;
     dl[p]->mtime = lst.st_mtime;
 
+/*
 #ifdef __EMX__
     dl[p]->attr = lst.st_attr;
 #else
 
     if ((lst.st_mode & S_IFMT) == S_IFLNK) {
-      if (lst.st_size+1 > lbufsize) lbuf = xrealloc(lbuf,lbufsize=(lst.st_size+8192));
-      if ((len=readlink(path,lbuf,lbufsize-1)) < 0) {
+      if (lst.st_size+1 > lbufsize) lbuf = xrealloc(lbuf,lbufsize=(lst.st_size+8192));readlink
+      //if ((len=readlink(path,lbuf,lbufsize-1)) < 0) {
+      if (1) {
 	dl[p]->lnk = scopy("[Error reading symbolic link information]");
 	dl[p]->isdir = FALSE;
 	dl[p++]->lnkmode = st.st_mode;
@@ -790,6 +810,7 @@ struct _info **read_dir(char *dir, int *n)
       }
     }
 #endif
+*/
 
     /* These should be elminiated, as they're barely used */
     dl[p]->isdir = ((st.st_mode & S_IFMT) == S_IFDIR);
@@ -821,7 +842,7 @@ struct _info **unix_getfulltree(char *d, u_long lev, dev_t dev, off_t *size, cha
   if (Level >= 0 && lev > Level) return NULL;
   if (xdev && lev == 0) {
     stat(d,&sb);
-    dev = sb.st_dev;
+    //dev = sb.st_dev;
   }
   // if the directory name matches, turn off pattern matching for contents
   if (matchdirs && pattern) {
@@ -863,7 +884,7 @@ struct _info **unix_getfulltree(char *d, u_long lev, dev_t dev, off_t *size, cha
     free(path);
     return NULL;
   }
-  if (cmpfunc) qsort(dir,n,sizeof(struct _info *),cmpfunc);
+  //if (cmpfunc) qsort(dir,n,sizeof(struct _info *),cmpfunc);
   
   if (lev >= maxdirs-1) {
     dirs = xrealloc(dirs,sizeof(int) * (maxdirs += 1024));
