@@ -1,0 +1,24 @@
+#
+# GnUeFtwPkg - https://github.com/cecekpawon/GnUeFtwPkg
+# cecekpawon - Wed Aug 14 15:57:45 2019
+#
+
+[Defines]
+  INF_VERSION       = 0x00010005
+  BASE_NAME         = Treem
+  FILE_GUID         = DF60C16B-C6CF-4BCF-A179-8CE62B82CFCB
+  MODULE_TYPE       = UEFI_APPLICATION
+  VERSION_STRING    = 0.1
+  ENTRY_POINT       = ShellCEntryLib
+
+[Sources]
+  GnUeFtwPkg/Source/Treem/Treem.c
+
+[Packages]
+  GnUeFtwPkg/GnUeFtwPkg.dec
+  MdePkg/MdePkg.dec
+  ShellPkg/ShellPkg.dec
+  StdLib/StdLib.dec
+
+[LibraryClasses]
+  DevMedia

@@ -35,4 +35,11 @@
   #
   #Lib|GnUeFtwPkg/Library/Lib/Lib.inf
 
+[Components]
+  GnUeFtwPkg/Module/Treem/Treem.inf
+  GnUeFtwPkg/Module/tree/tree.inf
+
 !include StdLib/StdLib.inc
+
+[BuildOptions]
+  MSFT:*_*_*_CC_FLAGS = /W2

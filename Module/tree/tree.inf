@@ -1,0 +1,32 @@
+#
+# GnUeFtwPkg - https://github.com/cecekpawon/GnUeFtwPkg
+# cecekpawon - Wed Aug 14 15:57:45 2019
+#
+
+[Defines]
+  INF_VERSION       = 0x00010005
+  BASE_NAME         = tree
+  FILE_GUID         = D4299AEA-BA99-4D7D-90D5-D88503ACE20F
+  MODULE_TYPE       = UEFI_APPLICATION
+  VERSION_STRING    = 0.1
+  ENTRY_POINT       = ShellCEntryLib
+
+[Sources]
+  GnUeFtwPkg/Source/tree/color.c
+  GnUeFtwPkg/Source/tree/file.c
+  GnUeFtwPkg/Source/tree/hash.c
+  GnUeFtwPkg/Source/tree/html.c
+  GnUeFtwPkg/Source/tree/json.c
+  GnUeFtwPkg/Source/tree/strverscmp.c
+  GnUeFtwPkg/Source/tree/tree.c
+  GnUeFtwPkg/Source/tree/unix.c
+  GnUeFtwPkg/Source/tree/xml.c
+
+[Packages]
+  GnUeFtwPkg/GnUeFtwPkg.dec
+  MdePkg/MdePkg.dec
+  ShellPkg/ShellPkg.dec
+  StdLib/StdLib.dec
+
+[LibraryClasses]
+  DevMedia
