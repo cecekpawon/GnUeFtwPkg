@@ -35,7 +35,4 @@
   #
   #Lib|GnUeFtwPkg/Library/Lib/Lib.inf
 
-[Components]
-  GnUeFtwPkg/Module/Tree/Tree.inf
-
 !include StdLib/StdLib.inc
