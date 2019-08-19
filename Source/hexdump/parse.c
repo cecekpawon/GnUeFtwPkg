@@ -47,9 +47,18 @@ static const char rcsid[] =
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <strings.h>
 #include "hexdump.h"
 
 FU *endfu;          /* format at end-of-data */
+
+uint64_t
+LIBC_MultU64x32 (Multiplicand, Multiplier)
+  uint64_t  Multiplicand;
+  size_t    Multiplier;
+{
+  return Multiplicand * Multiplier;
+}
 
 void
 addfile(name)
@@ -122,7 +131,8 @@ add(fmt)
 
     /* skip slash and trailing white space */
     if (*p == '/')
-      while (isspace(*++p));
+      //while (isspace(*++p));
+      for (++p; isspace(*p); ++p);
 
     /* byte count */
     if (isdigit(*p)) {
@@ -173,31 +183,35 @@ size(fs)
        * skip any special chars -- save precision in
        * case it's a %s format.
        */
-      while (index(spec + 1, *++fmt));
-      if (*fmt == '.' && isdigit(*++fmt)) {
+      //while (index(spec + 1, *++fmt));
+      for (++fmt; index(spec + 1, *fmt); ++fmt);
+      //if (*fmt == '.' && isdigit(*++fmt)) {
+      if ((*(++fmt-1) == '.') && isdigit(*fmt)) {
+        //fmt++;
         prec = atoi(fmt);
-        while (isdigit(*++fmt));
+        //while (isdigit(*++fmt));
+        for (++fmt; isdigit(*fmt); ++fmt);
       }
       switch(*fmt) {
-      case 'c':
-        bcnt += 1;
-        break;
-      case 'd': case 'i': case 'o': case 'u':
-      case 'x': case 'X':
-        bcnt += 4;
-        break;
-      case 'e': case 'E': case 'f': case 'g': case 'G':
-        bcnt += 8;
-        break;
-      case 's':
-        bcnt += prec;
-        break;
-      case '_':
-        switch(*++fmt) {
-        case 'c': case 'p': case 'u':
+        case 'c':
           bcnt += 1;
           break;
-        }
+        case 'd': case 'i': case 'o': case 'u':
+        case 'x': case 'X':
+          bcnt += 4;
+          break;
+        case 'e': case 'E': case 'f': case 'g': case 'G':
+          bcnt += 8;
+          break;
+        case 's':
+          bcnt += prec;
+          break;
+        case '_':
+          switch(*++fmt) {
+            case 'c': case 'p': case 'u':
+              bcnt += 1;
+              break;
+          }
       }
     }
     cursize += bcnt * fu->reps;
@@ -248,11 +262,13 @@ rewrite(fs)
         for (++p1; index(spec, *p1); ++p1);
       } else {
         /* Skip any special chars, field width. */
-        while (index(spec + 1, *++p1));
-        if (*p1 == '.' && isdigit(*++p1)) {
+        //while (index(spec + 1, *++p1));
+        for (++p1; index(spec + 1, *p1); ++p1);
+        if ((*(++p1-1) == '.') && isdigit(*p1)) {
           sokay = USEPREC;
           prec = atoi(p1);
-          while (isdigit(*++p1));
+          //while (isdigit(*++p1));
+          for (++p1; isdigit(*p1); ++p1);
         } else
           sokay = NOTOKAY;
       }
@@ -267,116 +283,122 @@ rewrite(fs)
        * padding for end of data.
        */
       switch(cs[0]) {
-      case 'c':
-        pr->flags = F_CHAR;
-        switch(fu->bcnt) {
-        case 0: case 1:
-          pr->bcnt = 1;
-          break;
-        default:
-          p1[1] = '\0';
-          badcnt(p1);
-        }
-        break;
-      case 'd': case 'i':
-        pr->flags = F_INT;
-        goto isint;
-      case 'o': case 'u': case 'x': case 'X':
-        pr->flags = F_UINT;
-isint:        cs[2] = '\0';
-        cs[1] = cs[0];
-        cs[0] = 'q';
-        switch(fu->bcnt) {
-        case 0: case 4:
-          pr->bcnt = 4;
-          break;
-        case 1:
-          pr->bcnt = 1;
-          break;
-        case 2:
-          pr->bcnt = 2;
-          break;
-        default:
-          p1[1] = '\0';
-          badcnt(p1);
-        }
-        break;
-      case 'e': case 'E': case 'f': case 'g': case 'G':
-        pr->flags = F_DBL;
-        switch(fu->bcnt) {
-        case 0: case 8:
-          pr->bcnt = 8;
-          break;
-        case 4:
-          pr->bcnt = 4;
-          break;
-        default:
-          p1[1] = '\0';
-          badcnt(p1);
-        }
-        break;
-      case 's':
-        pr->flags = F_STR;
-        switch(sokay) {
-        case NOTOKAY:
-          badsfmt();
-        case USEBCNT:
-          pr->bcnt = fu->bcnt;
-          break;
-        case USEPREC:
-          pr->bcnt = prec;
-          break;
-        }
-        break;
-      case '_':
-        ++p2;
-        switch(p1[1]) {
-        case 'A':
-          endfu = fu;
-          fu->flags |= F_IGNORE;
-          /* FALLTHROUGH */
-        case 'a':
-          pr->flags = F_ADDRESS;
-          ++p2;
-          switch(p1[2]) {
-          case 'd': case 'o': case'x':
-            cs[0] = 'q';
-            cs[1] = p1[2];
-            cs[2] = '\0';
-            break;
-          default:
-            p1[3] = '\0';
-            badconv(p1);
-          }
-          break;
         case 'c':
-          pr->flags = F_C;
-          /* cs[0] = 'c'; set in conv_c */
-          goto isint2;
-        case 'p':
-          pr->flags = F_P;
-          cs[0] = 'c';
-          goto isint2;
-        case 'u':
-          pr->flags = F_U;
-          /* cs[0] = 'c'; set in conv_u */
-isint2:         switch(fu->bcnt) {
+          pr->flags = F_CHAR;
+          switch(fu->bcnt) {
           case 0: case 1:
             pr->bcnt = 1;
             break;
           default:
-            p1[2] = '\0';
+            p1[1] = '\0';
             badcnt(p1);
           }
           break;
+        case 'd': case 'i':
+          pr->flags = F_INT;
+          goto isint;
+        case 'o': case 'u': case 'x': case 'X':
+          pr->flags = F_UINT;
+
+          isint:
+
+          cs[2] = '\0';
+          cs[1] = cs[0];
+          cs[0] = 'q';
+          switch(fu->bcnt) {
+          case 0: case 4:
+            pr->bcnt = 4;
+            break;
+          case 1:
+            pr->bcnt = 1;
+            break;
+          case 2:
+            pr->bcnt = 2;
+            break;
+          default:
+            p1[1] = '\0';
+            badcnt(p1);
+          }
+          break;
+        case 'e': case 'E': case 'f': case 'g': case 'G':
+          pr->flags = F_DBL;
+          switch(fu->bcnt) {
+          case 0: case 8:
+            pr->bcnt = 8;
+            break;
+          case 4:
+            pr->bcnt = 4;
+            break;
+          default:
+            p1[1] = '\0';
+            badcnt(p1);
+          }
+          break;
+        case 's':
+          pr->flags = F_STR;
+          switch(sokay) {
+            case NOTOKAY:
+              badsfmt();
+            case USEBCNT:
+              pr->bcnt = fu->bcnt;
+              break;
+            case USEPREC:
+              pr->bcnt = prec;
+              break;
+          }
+          break;
+        case '_':
+          ++p2;
+          switch(p1[1]) {
+            case 'A':
+              endfu = fu;
+              fu->flags |= F_IGNORE;
+              /* FALLTHROUGH */
+            case 'a':
+              pr->flags = F_ADDRESS;
+              ++p2;
+              switch(p1[2]) {
+                case 'd': case 'o': case'x':
+                  cs[0] = 'q';
+                  cs[1] = p1[2];
+                  cs[2] = '\0';
+                  break;
+                default:
+                  p1[3] = '\0';
+                  badconv(p1);
+              }
+              break;
+            case 'c':
+              pr->flags = F_C;
+              /* cs[0] = 'c'; set in conv_c */
+              goto isint2;
+            case 'p':
+              pr->flags = F_P;
+              cs[0] = 'c';
+              goto isint2;
+            case 'u':
+              pr->flags = F_U;
+              /* cs[0] = 'c'; set in conv_u */
+
+            isint2:
+
+            switch(fu->bcnt) {
+              case 0: case 1:
+                pr->bcnt = 1;
+                break;
+              default:
+                p1[2] = '\0';
+                badcnt(p1);
+              }
+              break;
+            default:
+              p1[2] = '\0';
+              badconv(p1);
+          }
+          break;
         default:
-          p1[2] = '\0';
+          p1[1] = '\0';
           badconv(p1);
-        }
-        break;
-      default:
-        p1[1] = '\0';
-        badconv(p1);
       }
 
       /*

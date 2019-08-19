@@ -36,6 +36,7 @@
   #Lib|GnUeFtwPkg/Library/Lib/Lib.inf
 
 [Components]
+  GnUeFtwPkg/Module/hexdump/hexdump.inf
   GnUeFtwPkg/Module/HexDumpW/HexDumpW.inf
   GnUeFtwPkg/Module/tree/tree.inf
   GnUeFtwPkg/Module/Treem/Treem.inf

@@ -60,6 +60,7 @@ static const char rcsid[] =
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 #include <errno.h>
 #include "hexdump.h"
 

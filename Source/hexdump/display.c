@@ -58,6 +58,7 @@ static const char rcsid[] =
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <unistd.h>
 #include "hexdump.h"
 
@@ -67,6 +68,13 @@ static off_t address;     /* address/offset in stream */
 static off_t eaddress;      /* end address */
 
 static inline void print __P((PR *, u_char *));
+
+static
+void
+xbzero(char *p, int size) {
+  while (size--)
+    *p++ = 0;
+}
 
 void
 display()
@@ -281,7 +289,7 @@ get()
           (void)printf("*\n");
         return((u_char *)NULL);
       }
-      bzero((char *)curp + nread, need);
+      xbzero((char *)curp + nread, need);
       eaddress = address + nread;
       return(curp);
     }
@@ -337,7 +345,7 @@ next(argc,argv)
     if ( _cur_arg < _argc-1 ) {
                         int fd = -1;
                         close(0);
-                        fd = open( _argv[_cur_arg], O_RDONLY );
+                        fd = open( _argv[_cur_arg], O_RDONLY, 0 );
                         if ( fd != 0 ) {
                         /* END EFI PORT CHANGES */
         warn("%s", _argv[_cur_arg]);
@@ -404,7 +412,7 @@ emalloc(size)
 
   if ((p = malloc((u_int)size)) == NULL)
     nomem();
-  bzero(p, size);
+  xbzero(p, size);
   return(p);
 }
 

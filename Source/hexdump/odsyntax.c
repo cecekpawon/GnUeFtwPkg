@@ -49,7 +49,7 @@ static const char rcsid[] =
   "$Id: odsyntax.c,v 1.1.1.1 2006/05/30 06:01:29 hhzhou Exp $";
 #endif /* not lint */
 
-#include <atk_libc.h>
+//#include <atk_libc.h>
 #include <sys/types.h>
 
 #include <ctype.h>

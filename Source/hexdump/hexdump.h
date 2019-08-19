@@ -33,6 +33,11 @@
  *  @(#)hexdump.h 8.1 (Berkeley) 6/6/93
  */
 
+
+#ifndef __P
+#define __P(x)  x
+#endif  //  __P
+
 typedef struct _pr {
   struct _pr *nextpr;   /* next print unit */
 #define F_ADDRESS 0x001   /* print offset */
@@ -74,24 +79,25 @@ extern FS *fshead;      /* head of format strings list */
 extern int blocksize;     /* data block size */
 enum _vflag { ALL, DUP, FIRST, WAIT };  /* -v values */
 
-void   add __P((char *));
-void   addfile __P((char *));
-void   badcnt __P((char *));
-void   badconv __P((char *));
-void   badfmt __P((char *));
-void   badsfmt __P((void));
-void   bpad __P((PR *));
-void   conv_c __P((PR *, u_char *));
-void   conv_u __P((PR *, u_char *));
-void   display __P((void));
-void   doskip __P((char *, int));
-void  *emalloc __P((int));
-void   escape __P((char *));
-u_char  *get __P((void));
-void   newsyntax __P((int, char ***));
-int  next __P((char **));
-void   nomem __P((void));
-void   oldsyntax __P((int, char ***));
-void   rewrite __P((FS *));
-int  size __P((FS *));
-void   usage __P((void));
+void      add __P((char *));
+void      addfile __P((char *));
+void      badcnt __P((char *));
+void      badconv __P((char *));
+void      badfmt __P((char *));
+void      badsfmt __P((void));
+void      bpad __P((PR *));
+void      conv_c __P((PR *, u_char *));
+void      conv_u __P((PR *, u_char *));
+void      display __P((void));
+void      doskip __P((char *, int));
+void      *emalloc __P((int));
+void      escape __P((char *));
+u_char    *get __P((void));
+void      newsyntax __P((int *, char ***));
+int       next __P((int, char **));
+void      nomem __P((void));
+void      oldsyntax __P((int *, char ***));
+void      rewrite __P((FS *));
+int       size __P((FS *));
+void      usage __P((void));
+uint64_t  LIBC_MultU64x32 __P((uint64_t, size_t));

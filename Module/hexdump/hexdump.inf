@@ -1,0 +1,35 @@
+#
+# GnUeFtwPkg - https://github.com/cecekpawon/GnUeFtwPkg
+# cecekpawon - Wed Aug 14 15:57:45 2019
+#
+
+[Defines]
+  INF_VERSION       = 0x00010005
+  BASE_NAME         = hexdump
+  FILE_GUID         = EC637542-F1D7-45DE-AD61-1EB590842D5F
+  MODULE_TYPE       = UEFI_APPLICATION
+  VERSION_STRING    = 0.1
+  ENTRY_POINT       = ShellCEntryLib
+
+[Sources]
+  GnUeFtwPkg/Source/hexdump/conv.c
+  GnUeFtwPkg/Source/hexdump/display.c
+  GnUeFtwPkg/Source/hexdump/hexdump.c
+  GnUeFtwPkg/Source/hexdump/hexdump.h
+  GnUeFtwPkg/Source/hexdump/hexsyntax.c
+  GnUeFtwPkg/Source/hexdump/odsyntax.c
+  GnUeFtwPkg/Source/hexdump/parse.c
+
+[Packages]
+  GnUeFtwPkg/GnUeFtwPkg.dec
+  MdePkg/MdePkg.dec
+  ShellPkg/ShellPkg.dec
+  StdLib/StdLib.dec
+
+[LibraryClasses]
+  LibErr
+  DevMedia
+
+[BuildOptions]
+  MSFT:*_*_*_CC_FLAGS   = -Dlint
+  GCC:*_*_*_CC_FLAGS    = -Wno-parentheses -Wno-pointer-sign -Dlint
