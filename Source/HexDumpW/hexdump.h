@@ -67,22 +67,22 @@ int hxd_v_api(void);
 
 
 enum hxd_errors {
-	HXD_EFORMAT = HXD_EBASE,
-	/* a compile-time error signaling an invalid format string, format
-	   unit, or conversion specification syntax */
+  HXD_EFORMAT = HXD_EBASE,
+  /* a compile-time error signaling an invalid format string, format
+     unit, or conversion specification syntax */
 
-	HXD_EDRAINED,
-	/* a compile-time error signaling that preceding conversions have
-	   already drained the input block */
+  HXD_EDRAINED,
+  /* a compile-time error signaling that preceding conversions have
+     already drained the input block */
 
-	HXD_ENOTSUPP,
-	/* a compile-time error returned for valid but unsupported
-	   conversion specifications */
+  HXD_ENOTSUPP,
+  /* a compile-time error returned for valid but unsupported
+     conversion specifications */
 
-	HXD_EOOPS,
-	/* something horrible happened */
+  HXD_EOOPS,
+  /* something horrible happened */
 
-	HXD_ELAST
+  HXD_ELAST
 }; /* enum hxd_errors */
 
 #define hxd_error_t int /* for documentation purposes only */
@@ -149,7 +149,7 @@ size_t hxd_read(struct hexdump *, void *, size_t);
  *
  *   local hexdump = require"hexdump"
  *
- *   hexdump.NATIVE 
+ *   hexdump.NATIVE
  *   hexdump.NETWORK
  *   hexdump.BIG_ENDIAN
  *   hexdump.LITTLE_ENDIAN
@@ -160,7 +160,7 @@ size_t hxd_read(struct hexdump *, void *, size_t);
  *     Bitwise flag which disables padding; instead, formatting units are
  *     skipped entirely when the block buffer is too short.
  *
- *   hexdump.b 
+ *   hexdump.b
  *   hexdump.c
  *   hexdump.C
  *   hexdump.d
@@ -206,7 +206,7 @@ size_t hxd_read(struct hexdump *, void *, size_t);
  *
  *   :read()
  *     Drains and returns the output buffer as a string.
- * 
+ *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 int luaopen_hexdump(/* pointer to lua_State */);
