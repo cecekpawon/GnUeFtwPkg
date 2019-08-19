@@ -23,8 +23,44 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  * ==========================================================================
  */
+ /*
+  HexDumpW
+  https://github.com/wahern/hexdump
+
+  GnUeFtwPkg - https://github.com/cecekpawon/GnUeFtwPkg
+  cecekpawon - Wed Aug 14 15:57:45 2019
+*/
+
 #ifndef HEXDUMP_H
 #define HEXDUMP_H
+
+#define HEXDUMP_MAIN    (1)
+#define HEXDUMP_LUALIB  (0)
+//#define VM_FASTER       (1)
+
+#ifndef NOTUSED
+#if __GNUC__
+#define NOTUSED __attribute__((unused))
+#else
+#define NOTUSED
+#endif
+#endif
+
+#ifndef NORETURN
+#if __GNUC__
+#define NORETURN __attribute__((noreturn))
+#else
+#define NORETURN
+#endif
+#endif
+
+#if __GNUC__
+extern NORETURN void longjmp(jmp_buf env, int val);
+#endif
+
+#if _MSC_VER && _MSC_VER < 1900 && !defined inline
+#define inline __inline
+#endif
 
 
 /*

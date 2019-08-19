@@ -1,0 +1,27 @@
+#
+# GnUeFtwPkg - https://github.com/cecekpawon/GnUeFtwPkg
+# cecekpawon - Wed Aug 14 15:57:45 2019
+#
+
+[Defines]
+  INF_VERSION       = 0x00010005
+  BASE_NAME         = HexDumpW
+  FILE_GUID         = B0159DCC-8F2F-4DCE-8C01-C1200781CFE4
+  MODULE_TYPE       = UEFI_APPLICATION
+  VERSION_STRING    = 0.1
+  ENTRY_POINT       = ShellCEntryLib
+
+[Sources]
+  GnUeFtwPkg/Source/HexDumpW/hexdump.c
+  GnUeFtwPkg/Source/HexDumpW/hexdump.h
+
+[Packages]
+  GnUeFtwPkg/GnUeFtwPkg.dec
+  MdePkg/MdePkg.dec
+  ShellPkg/ShellPkg.dec
+  StdLib/StdLib.dec
+
+[LibraryClasses]
+  DevMedia
+  LibErr
+  #LuaLib

@@ -36,8 +36,9 @@
   #Lib|GnUeFtwPkg/Library/Lib/Lib.inf
 
 [Components]
-  GnUeFtwPkg/Module/Treem/Treem.inf
+  GnUeFtwPkg/Module/HexDumpW/HexDumpW.inf
   GnUeFtwPkg/Module/tree/tree.inf
+  GnUeFtwPkg/Module/Treem/Treem.inf
 
 !include StdLib/StdLib.inc
 

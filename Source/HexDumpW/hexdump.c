@@ -23,6 +23,15 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  * ==========================================================================
  */
+
+ /*
+  HexDumpW
+  https://github.com/wahern/hexdump
+
+  GnUeFtwPkg - https://github.com/cecekpawon/GnUeFtwPkg
+  cecekpawon - Wed Aug 14 15:57:45 2019
+*/
+
 #if __STDC__ && !_XOPEN_SOURCE
 #define _XOPEN_SOURCE 600 /* _setjmp(3), _longjmp(3), getopt(3) */
 #endif
@@ -57,26 +66,6 @@
 #endif
 
 #define countof(a) (sizeof (a) / sizeof *(a))
-
-#ifndef NOTUSED
-#if __GNUC__
-#define NOTUSED __attribute__((unused))
-#else
-#define NOTUSED
-#endif
-#endif
-
-#ifndef NORETURN
-#if __GNUC__
-#define NORETURN __attribute__((noreturn))
-#else
-#define NORETURN
-#endif
-#endif
-
-#if _MSC_VER && _MSC_VER < 1900 && !defined inline
-#define inline __inline
-#endif
 
 #if _MSC_VER
 #define NARG_OUTER(x) x
@@ -565,14 +554,14 @@ NOTUSED static void vm_dump(struct vm_state *M, FILE *fp) {
 } /* vm_dump() */
 
 
-#ifdef _WIN32
+#if 1 //#ifdef _WIN32
 #define vm_enter(M) setjmp((M)->trap)
 #else
 #define vm_enter(M) _setjmp((M)->trap)
 #endif
 
 NORETURN static void vm_throw(struct vm_state *M, int error) {
-#ifdef _WIN32
+#if 1 //#ifdef _WIN32
   longjmp(M->trap, error);
 #else
   _longjmp(M->trap, error);
@@ -747,30 +736,33 @@ static void vm_conv(struct vm_state *M, int flags, int width, int prec, int fc, 
 } /* vm_conv() */
 
 
-#ifndef VM_FASTER
+//#ifndef VM_FASTER
 #ifdef __GNUC__
 #define VM_FASTER 1
 #else
 #define VM_FASTER 0
 #endif
-#endif
+//#endif
 
 #if VM_FASTER
 #define GNUX(...) (__extension__ ({ __VA_ARGS__; })) /* quiet compiler diagnostics */
 #define BEGIN GNUX(goto *jump[M->code[M->pc]])
 #define END (void)0
-#define CASE(op) XPASTE(OP_, op)
+//#define CASE(op) XPASTE(OP_, op)
+#define CASE(op) OP_##op
 #define NEXT GNUX(goto *jump[M->code[++M->pc]])
 #else
 #define BEGIN exec: switch (M->code[M->pc]) {
 #define END } (void)0
-#define CASE(op) case XPASTE(OP_, op)
+//#define CASE(op) case XPASTE(OP_, op )
+#define CASE(op) case OP_##op
 #define NEXT ++M->pc; goto exec
 #endif
 
 static void vm_exec(struct vm_state *M) {
 #if VM_FASTER
-#define L(L) (__extension__ &&XPASTE(OP_, L))
+//#define L(L) (__extension__ &&XPASTE(OP_, L))
+#define L(op) (__extension__ &&OP_##op)
   static const void *const jump[] = {
     L(HALT), L(NOOP), L(TRAP), L(PC), L(TRUE), L(FALSE),
     L(ZERO), L(ONE), L(TWO), L(I8), L(I16), L(I32),
