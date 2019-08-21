@@ -7,9 +7,12 @@
 |/___\|/___\|/___\|/___\/___\/___\|/___\|
 ```
 
-- [hexdump](Source/hexdump) BSD EFI Toolkit
-- [HexDumpW](Source/HexDumpW) by William Ahern
-- [tree](Source/tree) GNU by Steve Baker
-- [Treem](Source/Treem) (aka Tree Mini) by Steve Baker
+- [hexdump](Module/hexdump) BSD EFI Toolkit
+- [HexDumpW](Module/HexDumpW) by William Ahern
+- [tree](Module/tree) GNU by Steve Baker
+- [Treem](Module/Treem) (aka Tree Mini) by Steve Baker
+- [ZlibZip - minigzip](Module/ZlibZip/minigzip) Zlib minigzip
+- [ZlibZip - miniunz](Module/ZlibZip/minizip) Zlib miniunz
+- [ZlibZip - minizip](Module/ZlibZip/minizip) Zlib minigzip
 
 [Download](Bin)
