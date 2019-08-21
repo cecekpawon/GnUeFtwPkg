@@ -12,15 +12,15 @@
   ENTRY_POINT       = ShellCEntryLib
 
 [Sources]
-  GnUeFtwPkg/Source/tree/color.c
-  GnUeFtwPkg/Source/tree/file.c
-  GnUeFtwPkg/Source/tree/hash.c
-  GnUeFtwPkg/Source/tree/html.c
-  GnUeFtwPkg/Source/tree/json.c
-  GnUeFtwPkg/Source/tree/strverscmp.c
-  GnUeFtwPkg/Source/tree/tree.c
-  GnUeFtwPkg/Source/tree/unix.c
-  GnUeFtwPkg/Source/tree/xml.c
+  color.c
+  file.c
+  hash.c
+  html.c
+  json.c
+  strverscmp.c
+  tree.c
+  unix.c
+  xml.c
 
 [Packages]
   GnUeFtwPkg/GnUeFtwPkg.dec

@@ -12,8 +12,7 @@
   ENTRY_POINT       = ShellCEntryLib
 
 [Sources]
-  GnUeFtwPkg/Source/HexDumpW/hexdump.c
-  GnUeFtwPkg/Source/HexDumpW/hexdump.h
+  hexdump.c
 
 [Packages]
   GnUeFtwPkg/GnUeFtwPkg.dec

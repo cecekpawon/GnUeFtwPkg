@@ -12,7 +12,7 @@
   ENTRY_POINT       = ShellCEntryLib
 
 [Sources]
-  GnUeFtwPkg/Source/Treem/Treem.c
+  Treem.c
 
 [Packages]
   GnUeFtwPkg/GnUeFtwPkg.dec

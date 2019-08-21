@@ -12,13 +12,13 @@
   ENTRY_POINT       = ShellCEntryLib
 
 [Sources]
-  GnUeFtwPkg/Source/hexdump/conv.c
-  GnUeFtwPkg/Source/hexdump/display.c
-  GnUeFtwPkg/Source/hexdump/hexdump.c
-  GnUeFtwPkg/Source/hexdump/hexdump.h
-  GnUeFtwPkg/Source/hexdump/hexsyntax.c
-  GnUeFtwPkg/Source/hexdump/odsyntax.c
-  GnUeFtwPkg/Source/hexdump/parse.c
+  conv.c
+  display.c
+  hexdump.c
+  hexdump.h
+  hexsyntax.c
+  odsyntax.c
+  parse.c
 
 [Packages]
   GnUeFtwPkg/GnUeFtwPkg.dec
@@ -31,5 +31,7 @@
   DevMedia
 
 [BuildOptions]
-  MSFT:*_*_*_CC_FLAGS   = -Dlint
-  GCC:*_*_*_CC_FLAGS    = -Wno-parentheses -Wno-pointer-sign -Dlint
+  DEFINE  GLOBAL_OPTIONS  = -D lint
+
+  MSFT:*_*_*_CC_FLAGS     = $(GLOBAL_OPTIONS)
+  GCC:*_*_*_CC_FLAGS      = $(GLOBAL_OPTIONS) -Wno-parentheses -Wno-pointer-sign
