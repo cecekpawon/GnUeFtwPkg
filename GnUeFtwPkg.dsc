@@ -40,8 +40,11 @@
   GnUeFtwPkg/Module/HexDumpW/HexDumpW.inf
   GnUeFtwPkg/Module/tree/tree.inf
   GnUeFtwPkg/Module/Treem/Treem.inf
+  GnUeFtwPkg/Module/ZlibZip/minigzip/minigzip.inf
+  GnUeFtwPkg/Module/ZlibZip/minizip/miniunzip.inf
+  GnUeFtwPkg/Module/ZlibZip/minizip/minizip.inf
 
 !include StdLib/StdLib.inc
 
 [BuildOptions]
-  MSFT:*_*_*_CC_FLAGS = /W2
+  MSFT:*_*_*_CC_FLAGS = /W2 /Gs99999

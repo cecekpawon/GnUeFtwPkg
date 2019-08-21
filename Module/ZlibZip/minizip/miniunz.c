@@ -27,7 +27,7 @@
         #endif
 #endif
 
-#ifdef __APPLE__
+#if 0 //#ifdef __APPLE__
 // In darwin and perhaps other BSD variants off_t is a 64 bit value, hence no need for specific 64 bit functions
 #define FOPEN_FUNC(filename, mode) fopen(filename, mode)
 #define FTELLO_FUNC(stream) ftello(stream)
@@ -97,7 +97,7 @@ void change_file_date(filename,dosdate,tmu_date)
   SetFileTime(hFile,&ftm,&ftLastAcc,&ftm);
   CloseHandle(hFile);
 #else
-#ifdef unix || __APPLE__
+#if defined(unix) || defined(__APPLE__)
   struct utimbuf ut;
   struct tm newdate;
   newdate.tm_sec = tmu_date.tm_sec;
@@ -183,6 +183,24 @@ int makedir (newdir)
     }
   free(buffer);
   return 1;
+}
+
+static
+int
+is_dir (
+  const char  *entry
+  )
+{
+         int   result;
+  struct stat  entry_stat;
+
+  result = 1;
+
+  if ((stat (entry, &entry_stat) != 0) || !S_ISDIR (entry_stat.st_mode)) {
+    result = 0;
+  }
+
+  return result;
 }
 
 void do_banner()
@@ -601,29 +619,34 @@ int main(argc,argv)
 
     if (zipfilename!=NULL)
     {
+        if (is_dir(zipfilename)) {
+            printf("error %s is directory\n",zipfilename);
+            return 1;
+        }
+        else {
+#           ifdef USEWIN32IOAPI
+           zlib_filefunc64_def ffunc;
+#           endif
 
-#        ifdef USEWIN32IOAPI
-        zlib_filefunc64_def ffunc;
-#        endif
+           strncpy(filename_try, zipfilename,MAXFILENAME-1);
+           /* strncpy doesnt append the trailing NULL, of the string is too long. */
+           filename_try[ MAXFILENAME ] = '\0';
 
-        strncpy(filename_try, zipfilename,MAXFILENAME-1);
-        /* strncpy doesnt append the trailing NULL, of the string is too long. */
-        filename_try[ MAXFILENAME ] = '\0';
-
-#        ifdef USEWIN32IOAPI
-        fill_win32_filefunc64A(&ffunc);
-        uf = unzOpen2_64(zipfilename,&ffunc);
-#        else
-        uf = unzOpen64(zipfilename);
-#        endif
-        if (uf==NULL)
-        {
-            strcat(filename_try,".zip");
-#            ifdef USEWIN32IOAPI
-            uf = unzOpen2_64(filename_try,&ffunc);
-#            else
-            uf = unzOpen64(filename_try);
-#            endif
+#           ifdef USEWIN32IOAPI
+           fill_win32_filefunc64A(&ffunc);
+           uf = unzOpen2_64(zipfilename,&ffunc);
+#           else
+           uf = unzOpen64(zipfilename);
+#           endif
+           if (uf==NULL)
+           {
+               strcat(filename_try,".zip");
+#               ifdef USEWIN32IOAPI
+               uf = unzOpen2_64(filename_try,&ffunc);
+#               else
+               uf = unzOpen64(filename_try);
+#               endif
+           }
         }
     }
 

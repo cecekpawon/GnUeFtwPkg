@@ -28,7 +28,7 @@
         #endif
 #endif
 
-#ifdef __APPLE__
+#if 0 //#ifdef __APPLE__
 // In darwin and perhaps other BSD variants off_t is a 64 bit value, hence no need for specific 64 bit functions
 #define FOPEN_FUNC(filename, mode) fopen(filename, mode)
 #define FTELLO_FUNC(stream) ftello(stream)
@@ -94,7 +94,7 @@ uLong filetime(f, tmzip, dt)
   return ret;
 }
 #else
-#ifdef unix || __APPLE__
+#if defined(unix) || defined(__APPLE__)
 uLong filetime(f, tmzip, dt)
     char *f;               /* name of file to get info on */
     tm_zip *tmzip;         /* return value: access, modific. and creation times */
@@ -232,7 +232,7 @@ int isLargeFile(const char* filename)
     int n = FSEEKO_FUNC(pFile, 0, SEEK_END);
     pos = FTELLO_FUNC(pFile);
 
-                printf("File : %s is %lld bytes\n", filename, pos);
+                printf("File : %s is %ld bytes\n", filename, (long)pos);
 
     if(pos >= 0xffffffff)
      largeFile = 1;
@@ -241,6 +241,24 @@ int isLargeFile(const char* filename)
   }
 
  return largeFile;
+}
+
+static
+int
+is_dir (
+  const char  *entry
+  )
+{
+         int   result;
+  struct stat  entry_stat;
+
+  result = 1;
+
+  if ((stat (entry, &entry_stat) != 0) || !S_ISDIR (entry_stat.st_mode)) {
+    result = 0;
+  }
+
+  return result;
 }
 
 int main(argc,argv)
@@ -395,7 +413,7 @@ int main(argc,argv)
                    ((argv[i][1]>='0') || (argv[i][1]<='9'))) &&
                   (strlen(argv[i]) == 2)))
             {
-                FILE * fin;
+                FILE * fin = NULL;
                 int size_read;
                 const char* filenameinzip = argv[i];
                 const char *savefilenameinzip;
@@ -460,11 +478,17 @@ int main(argc,argv)
                     printf("error in opening %s in zipfile\n",filenameinzip);
                 else
                 {
-                    fin = FOPEN_FUNC(filenameinzip,"rb");
-                    if (fin==NULL)
-                    {
+                    if (is_dir(filenameinzip)) {
                         err=ZIP_ERRNO;
-                        printf("error in opening %s for reading\n",filenameinzip);
+                        printf("error %s is directory\n",filenameinzip);
+                    }
+                    else {
+                      fin = FOPEN_FUNC(filenameinzip,"rb");
+                      if (fin==NULL)
+                      {
+                          err=ZIP_ERRNO;
+                          printf("error in opening %s for reading\n",filenameinzip);
+                      }
                     }
                 }
 

@@ -29,7 +29,7 @@
 #  include <sys/stat.h>
 #endif
 
-#if defined(MSDOS) || defined(OS2) || defined(WIN32) || defined(__CYGWIN__)
+#if 0//defined(MSDOS) || defined(OS2) || defined(WIN32) || defined(__CYGWIN__)
 #  include <fcntl.h>
 #  include <io.h>
 #  ifdef UNDER_CE
