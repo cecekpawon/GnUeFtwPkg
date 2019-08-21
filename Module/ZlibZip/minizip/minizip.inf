@@ -1,0 +1,33 @@
+#
+# GnUeFtwPkg - https://github.com/cecekpawon/GnUeFtwPkg
+# cecekpawon - Wed Aug 14 15:57:45 2019
+#
+
+[Defines]
+  INF_VERSION       = 0x00010005
+  BASE_NAME         = minizip
+  FILE_GUID         = D4A3EC2B-BD33-44DB-BF5D-C256B4EFC74F
+  MODULE_TYPE       = UEFI_APPLICATION
+  VERSION_STRING    = 0.1
+  ENTRY_POINT       = ShellCEntryLib
+
+[Sources]
+  ioapi.c
+  minizip.c
+  zip.c
+
+[Packages]
+  GnUeFtwPkg/GnUeFtwPkg.dec
+  GnUeFtwPkg/Library/ZlibPkg/ZlibPkg.dec
+  MdePkg/MdePkg.dec
+  ShellPkg/ShellPkg.dec
+  StdLib/StdLib.dec
+
+[LibraryClasses]
+  ZlibPkg
+
+[BuildOptions]
+  DEFINE  GLOBAL_OPTIONS  = -D USE_FILE32API
+
+  MSFT:*_*_*_CC_FLAGS     = $(GLOBAL_OPTIONS)
+  GCC:*_*_*_CC_FLAGS      = $(GLOBAL_OPTIONS) -Wno-unused-variable -Wno-incompatible-pointer-types-discards-qualifiers
