@@ -33,7 +33,7 @@
   #
   #
   #
-  #Lib|GnUeFtwPkg/Library/Lib/Lib.inf
+  ZlibPkg|GnUeFtwPkg/Library/ZlibPkg/ZlibPkg.inf
 
 [Components]
   GnUeFtwPkg/Module/hexdump/hexdump.inf
