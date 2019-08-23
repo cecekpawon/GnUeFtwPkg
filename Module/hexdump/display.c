@@ -88,6 +88,7 @@ display()
   off_t saveaddress;
   u_char savech, *savebp;
 
+  savech = 0;
   while (bp = get()) {
       for (fs = fshead, savebp = bp, saveaddress = address; fs;
     fs = fs->nextfs, bp = savebp, address = saveaddress) {

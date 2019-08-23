@@ -229,7 +229,7 @@ int isLargeFile(const char* filename)
 
   if(pFile != NULL)
   {
-    int n = FSEEKO_FUNC(pFile, 0, SEEK_END);
+    /*int n =*/ FSEEKO_FUNC(pFile, 0, SEEK_END);
     pos = FTELLO_FUNC(pFile);
 
                 printf("File : %s is %ld bytes\n", filename, (long)pos);
@@ -335,7 +335,7 @@ int main(argc,argv)
     }
     else
     {
-        int i,len;
+        int /*i,*/len;
         int dot_found=0;
 
         zipok = 1 ;

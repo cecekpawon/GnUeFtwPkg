@@ -17,6 +17,7 @@
 
 #include "zlib.h"
 #include <stdio.h>
+#include <unistd.h>
 
 #ifdef STDC
 #  include <string.h>
@@ -500,7 +501,7 @@ void file_uncompress(file)
     char *infile, *outfile;
     FILE  *out;
     gzFile in;
-    unsigned len = strlen(file);
+    size_t len = strlen(file);
 
     if (len + strlen(GZ_SUFFIX) >= sizeof(buf)) {
         fprintf(stderr, "%s: filename too long\n", prog);

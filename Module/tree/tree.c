@@ -39,7 +39,7 @@ const char *charset = NULL;
 
 struct _info **(*getfulltree)(char *d, u_long lev, dev_t dev, off_t *size, char **err) = unix_getfulltree;
 off_t (*listdir)(char *, int *, int *, u_long, dev_t) = unix_listdir;
-int (*cmpfunc)() = alnumsort;
+int (*cmpfunc)(const void *, const void *) = alnumsort;
 
 char *sLevel, *curdir, *outfilename = NULL;
 FILE *outfile;
@@ -63,7 +63,7 @@ const u_short ifmt[]={ FILE_ARCHIVED, FILE_DIRECTORY, FILE_SYSTEM, FILE_HIDDEN, 
 
 struct sorts {
   char *name;
-  int (*cmpfunc)();
+  int (*cmpfunc)(const void *, const void *);
 } sorts[] = {
   {"name", alnumsort},
   {"version", versort},
@@ -832,7 +832,7 @@ struct _info **unix_getfulltree(char *d, u_long lev, dev_t dev, off_t *size, cha
 {
   char *path;
   long pathsize = 0;
-  struct _info **dir, **sav, **p, *sp;
+  struct _info **dir, **sav, **p, *sp1;
   struct stat sb;
   int n;
   u_long lev_tmp;
@@ -884,7 +884,7 @@ struct _info **unix_getfulltree(char *d, u_long lev, dev_t dev, off_t *size, cha
     free(path);
     return NULL;
   }
-  //if (cmpfunc) qsort(dir,n,sizeof(struct _info *),cmpfunc);
+  if (cmpfunc) qsort(dir,n,sizeof(struct _info *),cmpfunc);
   
   if (lev >= maxdirs-1) {
     dirs = xrealloc(dirs,sizeof(int) * (maxdirs += 1024));
@@ -918,12 +918,12 @@ struct _info **unix_getfulltree(char *d, u_long lev, dev_t dev, off_t *size, cha
       // prune empty folders, unless they match the requested pattern
       if (pruneflag && (*dir)->child == NULL &&
 	  !(matchdirs && pattern && patmatch((*dir)->name,pattern) == 1)) {
-	sp = *dir;
+	sp1 = *dir;
 	for(p=dir;*p;p++) *p = *(p+1);
 	n--;
-	free(sp->name);
-	if (sp->lnk) free(sp->lnk);
-	free(sp);
+	free(sp1->name);
+	if (sp1->lnk) free(sp1->lnk);
+	free(sp1);
 	continue;
       }
     }
@@ -939,9 +939,12 @@ struct _info **unix_getfulltree(char *d, u_long lev, dev_t dev, off_t *size, cha
 }
 
 /* Sorting functions */
-int alnumsort(struct _info **a, struct _info **b)
+
+int alnumsort(const void *a0, const void *b0)
 {
   int v;
+  const struct _info **a = (const struct _info **)a0;
+  const struct _info **b = (const struct _info **)b0;
 
   if (dirsfirst && ((*a)->isdir != (*b)->isdir)) {
     return (*a)->isdir ? -1 : 1;
@@ -950,9 +953,11 @@ int alnumsort(struct _info **a, struct _info **b)
   return reverse? -v : v;
 }
 
-int versort(struct _info **a, struct _info **b)
+int versort(const void *a0, const void *b0)
 {
   int v;
+  const struct _info **a = (const struct _info **)a0;
+  const struct _info **b = (const struct _info **)b0;
 
   if (dirsfirst && ((*a)->isdir != (*b)->isdir)) {
     return (*a)->isdir ? -1 : 1;
@@ -961,9 +966,11 @@ int versort(struct _info **a, struct _info **b)
   return reverse? -v : v;
 }
 
-int mtimesort(struct _info **a, struct _info **b)
+int mtimesort(const void *a0, const void *b0)
 {
   int v;
+  const struct _info **a = (const struct _info **)a0;
+  const struct _info **b = (const struct _info **)b0;
 
   if (dirsfirst && ((*a)->isdir != (*b)->isdir)) {
     return (*a)->isdir ? -1 : 1;
@@ -976,9 +983,11 @@ int mtimesort(struct _info **a, struct _info **b)
   return reverse? -v : v;
 }
 
-int ctimesort(struct _info **a, struct _info **b)
+int ctimesort(const void *a0, const void *b0)
 {
   int v;
+  const struct _info **a = (const struct _info **)a0;
+  const struct _info **b = (const struct _info **)b0;
 
   if (dirsfirst && ((*a)->isdir != (*b)->isdir)) {
     return (*a)->isdir ? -1 : 1;
@@ -996,9 +1005,11 @@ int sizecmp(off_t a, off_t b)
   return (a == b)? 0 : ((a < b)? 1 : -1);
 }
 
-int fsizesort(struct _info **a, struct _info **b)
+int fsizesort(const void *a0, const void *b0)
 {
   int v;
+  const struct _info **a = (const struct _info **)a0;
+  const struct _info **b = (const struct _info **)b0;
 
   if (dirsfirst && ((*a)->isdir != (*b)->isdir)) {
     return (*a)->isdir ? -1 : 1;

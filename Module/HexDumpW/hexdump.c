@@ -873,7 +873,7 @@ static void vm_exec(struct vm_state *M) {
 
     NEXT;
   CASE(DUP): {
-    int64_t v = vm_pop(M);
+    /*int64_t*/ v = vm_pop(M);
 
     vm_push(M, v);
     vm_push(M, v);
@@ -890,7 +890,7 @@ static void vm_exec(struct vm_state *M) {
     NEXT;
   }
   CASE(READ): {
-    int64_t i, n, v;
+    int64_t i, n;//, v
 
     n = vm_pop(M);
     v = 0;
@@ -1124,7 +1124,7 @@ static void emit_unit(struct vm_state *M, int loop, int limit, int flags, size_t
   while ((ch = **fmt)) {
     switch (ch) {
     case '%': {
-      int fc, flags, width, prec, bytes;
+      int fc, width, prec, bytes;//, flags
 
       if (escaped)
         goto copyout;
@@ -1381,7 +1381,7 @@ int hxd_compile(struct hexdump *X, const char *_fmt, int flags) {
   fmt = (const unsigned char *)_fmt;
 
   while (skipws(&fmt, 1)) {
-    int lc, loop, limit, flags;
+    int lc, loop, limit;//, flags
     size_t blocksize = 0;
 
     flags = X->vm.flags;
@@ -2050,16 +2050,16 @@ static void run(struct hexdump *X, FILE *fp, _Bool flush, size_t *off, size_t *m
 } /* run() */
 
 
-static size_t tosize(const char *optarg) {
+static size_t tosize(const char *optarg1) {
   unsigned long lu;
   char *argend;
 
   errno = 0;
-  lu = strtoul(optarg, &argend, 0);
+  lu = strtoul(optarg1, &argend, 0);
   if (lu == ULONG_MAX && errno == ERANGE)
-    err(EXIT_FAILURE, "%s", optarg);
-  if (argend == optarg)
-    errx(EXIT_FAILURE, "%s: invalid number", optarg);
+    err(EXIT_FAILURE, "%s", optarg1);
+  if (argend == optarg1)
+    errx(EXIT_FAILURE, "%s: invalid number", optarg1);
 
   if (*argend) {
     unsigned long scale = 0;
@@ -2080,11 +2080,11 @@ static size_t tosize(const char *optarg) {
     }
 
     if (!scale || *argend)
-      errx(EXIT_FAILURE, "%s: invalid number", optarg);
+      errx(EXIT_FAILURE, "%s: invalid number", optarg1);
 
     if (lu > ULONG_MAX / scale) {
       errno = ERANGE;
-      err(EXIT_FAILURE, "%s", optarg);
+      err(EXIT_FAILURE, "%s", optarg1);
     }
 
     lu *= scale;

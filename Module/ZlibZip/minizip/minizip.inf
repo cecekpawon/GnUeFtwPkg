@@ -27,7 +27,7 @@
   ZlibPkg
 
 [BuildOptions]
-  DEFINE  GLOBAL_OPTIONS  = -D USE_FILE32API
+  DEFINE  GLOBAL_OPTIONS  = -DUSE_FILE32API
 
   MSFT:*_*_*_CC_FLAGS     = $(GLOBAL_OPTIONS)
   GCC:*_*_*_CC_FLAGS      = $(GLOBAL_OPTIONS) -Wno-unused-variable -Wno-incompatible-pointer-types-discards-qualifiers

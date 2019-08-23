@@ -12,6 +12,16 @@
   DSC_SPECIFICATION       = 0x00010006
   SUPPORTED_ARCHITECTURES = X64 #IA32||ARM|AARCH64
 
+  DEFINE GLOBAL_OPTIONS =
+
+  !if $(TARGET) == RELEASE
+    DEFINE GLOBAL_OPTIONS = $(GLOBAL_OPTIONS) -DNDEBUG=TRUE -DMDEPKG_NDEBUG=TRUE
+  !elseif $(TARGET) == DEBUG
+    #
+  !else
+    #
+  !endif
+
 [LibraryClasses]
   BaseLib|MdePkg/Library/BaseLib/BaseLib.inf
   BaseMemoryLib|MdePkg/Library/BaseMemoryLibRepStr/BaseMemoryLibRepStr.inf
@@ -47,4 +57,6 @@
 !include StdLib/StdLib.inc
 
 [BuildOptions]
-  MSFT:*_*_*_CC_FLAGS = /W2 /Gs99999
+  #DEFINE  GLOBAL_OPTIONS    = $(GLOBAL_OPTIONS) -DDISABLE_NEW_DEPRECATED_INTERFACES=TRUE
+
+  MSFT:*_*_*_CC_FLAGS   = $(GLOBAL_OPTIONS) /wd4131

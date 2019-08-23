@@ -230,13 +230,18 @@ rewrite(fs)
   char savech, cs[3];
   int nconv, prec;
 
+  prec = 0;
+
   for (fu = fs->nextfu; fu; fu = fu->nextfu) {
     /*
      * Break each format unit into print units; each conversion
      * character gets its own.
      */
+    nextpr = &fu->nextpr;
     for (nconv = 0, fmtp = fu->fmt; *fmtp; nextpr = &pr->nextpr) {
       pr = emalloc(sizeof(PR));
+      if (pr == NULL)
+        err(1, NULL);
       if (!fu->nextpr)
         fu->nextpr = pr;
       else

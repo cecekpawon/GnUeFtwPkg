@@ -24,3 +24,6 @@
   DevMedia
   LibErr
   #LuaLib
+
+[BuildOptions]
+  MSFT:*_*_*_CC_FLAGS     = /wd4244 /wd4267 /wd4295 /wd4702 /wd4706

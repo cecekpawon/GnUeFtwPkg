@@ -51,7 +51,7 @@
 #endif
 
 #ifndef Z_BUFSIZE
-#define Z_BUFSIZE (64*1024) //(16384)
+#define Z_BUFSIZE (/*6*/4*1024) //(16384) // throw __chkstk
 #endif
 
 #ifndef Z_MAXFILENAMEINZIP
@@ -1371,7 +1371,7 @@ local int zip64FlushWriteBuffer(zip64_internal* zi)
         uInt i;
         int t;
         for (i=0;i<zi->ci.pos_in_buffered_data;i++)
-            zi->ci.buffered_data[i] = zencode(zi->ci.keys, zi->ci.pcrc_32_tab, zi->ci.buffered_data[i],t);
+            zi->ci.buffered_data[i] = (Byte)zencode(zi->ci.keys, zi->ci.pcrc_32_tab, zi->ci.buffered_data[i],t);
 #endif
     }
 

@@ -31,7 +31,7 @@
   DevMedia
 
 [BuildOptions]
-  DEFINE  GLOBAL_OPTIONS  = -D lint
+  DEFINE  GLOBAL_OPTIONS  = -Dlint
 
-  MSFT:*_*_*_CC_FLAGS     = $(GLOBAL_OPTIONS)
+  MSFT:*_*_*_CC_FLAGS     = $(GLOBAL_OPTIONS) /wd4244 /wd4267 /wd4706
   GCC:*_*_*_CC_FLAGS      = $(GLOBAL_OPTIONS) -Wno-parentheses -Wno-pointer-sign

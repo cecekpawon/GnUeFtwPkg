@@ -35,3 +35,6 @@
 
 [LibraryClasses]
   DevMedia
+
+[BuildOptions]
+  MSFT:*_*_*_CC_FLAGS   = /wd4244 /wd4245 /wd4267

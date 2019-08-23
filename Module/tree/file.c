@@ -23,7 +23,7 @@ extern bool noindent, force_color, flimit, matchdirs;
 extern bool reverse;
 extern char *pattern, *ipattern;
 
-extern int (*cmpfunc)();
+extern int (*cmpfunc)(const void *, const void *);
 extern FILE *outfile;
 extern int Level, *dirs, maxdirs;
 

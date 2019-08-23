@@ -137,13 +137,13 @@ void usage(int);
 struct _info **unix_getfulltree(char *d, u_long lev, dev_t dev, off_t *size, char **err);
 struct _info **read_dir(char *, int *);
 
-int alnumsort(struct _info **, struct _info **);
-int versort(struct _info **a, struct _info **b);
-int reversealnumsort(struct _info **, struct _info **);
-int mtimesort(struct _info **, struct _info **);
-int ctimesort(struct _info **, struct _info **);
+int alnumsort(const void *, const void *);
+int versort(const void *, const void *);
+//int reversealnumsort(const void *, const void *);
+int mtimesort(const void *, const void *);
+int ctimesort(const void *, const void *);
 int sizecmp(off_t a, off_t b);
-int fsizesort(struct _info **a, struct _info **b);
+int fsizesort(const void *, const void *);
 
 void *xmalloc(size_t), *xrealloc(void *, size_t);
 char *gnu_getcwd();

@@ -27,7 +27,7 @@ extern const char fmt[], *ftype[];
 
 extern struct _info **(*getfulltree)(char *d, u_long lev, dev_t dev, off_t *size, char **err);
 extern void (*listdir)(char *, int *, int *, u_long, dev_t);
-extern int (*cmpfunc)();
+extern int (*cmpfunc)(const void *, const void *);
 extern FILE *outfile;
 extern int Level, *dirs, maxdirs;
 
@@ -84,7 +84,7 @@ off_t json_listdir(char *d, int *dt, int *ft, u_long lev, dev_t dev)
     return 0;
   }
 
-  //if (cmpfunc) qsort(dir,n,sizeof(struct _info *),cmpfunc);
+  if (cmpfunc) qsort(dir,n,sizeof(struct _info *),cmpfunc);
   if (lev >= maxdirs-1) {
     dirs = xrealloc(dirs,sizeof(int) * (maxdirs += 1024));
     memset(dirs+(maxdirs-1024), 0, sizeof(int) * 1024);
