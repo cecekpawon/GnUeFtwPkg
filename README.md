@@ -7,6 +7,7 @@
 |/___\|/___\|/___\|/___\/___\/___\|/___\|
 ```
 
+- [edid](Module/edid) BSD videomode
 - [hexdump](Module/hexdump) BSD EFI Toolkit
 - [HexDumpW](Module/HexDumpW) by William Ahern
 - [tree](Module/tree) GNU by Steve Baker

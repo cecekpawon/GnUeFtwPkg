@@ -46,6 +46,7 @@
   ZlibPkg|GnUeFtwPkg/Library/ZlibPkg/ZlibPkg.inf
 
 [Components]
+  GnUeFtwPkg/Module/edid/edid.inf
   GnUeFtwPkg/Module/hexdump/hexdump.inf
   GnUeFtwPkg/Module/HexDumpW/HexDumpW.inf
   GnUeFtwPkg/Module/tree/tree.inf
