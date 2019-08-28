@@ -43,12 +43,14 @@
   #
   #
   #
+  NanoSvgLib|GnUeFtwPkg/Library/NanoSvgLib/NanoSvgLib.inf
   ZlibLib|GnUeFtwPkg/Library/ZlibLib/ZlibLib.inf
 
 [Components]
   GnUeFtwPkg/Module/edid/edid.inf
   GnUeFtwPkg/Module/hexdump/hexdump.inf
   GnUeFtwPkg/Module/HexDumpW/HexDumpW.inf
+  GnUeFtwPkg/Module/svg2png/svg2png.inf
   GnUeFtwPkg/Module/tree/tree.inf
   GnUeFtwPkg/Module/Treem/Treem.inf
   GnUeFtwPkg/Module/ZlibZip/minigzip/minigzip.inf
@@ -60,4 +62,4 @@
 [BuildOptions]
   #DEFINE  GLOBAL_OPTIONS    = $(GLOBAL_OPTIONS) -DDISABLE_NEW_DEPRECATED_INTERFACES=TRUE
 
-  MSFT:*_*_*_CC_FLAGS   = $(GLOBAL_OPTIONS) /wd4131
+  MSFT:*_*_*_CC_FLAGS   = $(GLOBAL_OPTIONS) /wd4131 /Gs999999

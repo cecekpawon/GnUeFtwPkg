@@ -1,0 +1,31 @@
+#
+# GnUeFtwPkg - https://github.com/cecekpawon/GnUeFtwPkg
+# cecekpawon - Wed Aug 14 15:57:45 2019
+#
+
+[Defines]
+  INF_VERSION       = 0x00010005
+  BASE_NAME         = NanoSvgLib
+  FILE_GUID         = E14213F7-B9B0-4A40-B83F-916BDD25F64E
+  MODULE_TYPE       = BASE
+  VERSION_STRING    = 1.0
+  LIBRARY_CLASS     = NanoSvgLib
+
+[Sources]
+  nanosvg.c
+  nanosvgrast.c
+  stb_image_write.c
+
+[Packages]
+  GnUeFtwPkg/GnUeFtwPkg.dec
+  MdePkg/MdePkg.dec
+  StdLib/StdLib.dec
+
+[LibraryClasses]
+  DevMedia
+  LibC
+  LibMath
+  LibErr
+
+[BuildOptions]
+  MSFT:*_*_*_CC_FLAGS   = /W2

@@ -5,31 +5,22 @@
 
 [Defines]
   INF_VERSION       = 0x00010005
-  BASE_NAME         = edid
+  BASE_NAME         = svg2png
   FILE_GUID         = D4299AEA-BA99-4D7D-90D5-D88503ACE20F
   MODULE_TYPE       = UEFI_APPLICATION
   VERSION_STRING    = 0.1
   ENTRY_POINT       = ShellCEntryLib
 
 [Sources]
-  edid.c
-  videomode.c
-  vesagtf.c
+  svg2png.c
 
 [Packages]
   GnUeFtwPkg/GnUeFtwPkg.dec
+  GnUeFtwPkg/Library/NanoSvgLib/NanoSvgLib.dec
   MdePkg/MdePkg.dec
   ShellPkg/ShellPkg.dec
   StdLib/StdLib.dec
 
 [LibraryClasses]
-  LibC
-
-[Protocols]
-  gEfiGraphicsOutputProtocolGuid
-  gEfiEdidDiscoveredProtocolGuid
-
-[BuildOptions]
-  MSFT:*_*_*_CC_FLAGS   = /W2
-  #MSFT:*_*_*_CC_FLAGS   = /wd4018 /wd4244 /wd4245 /wd4267 /wd4389 /wd4706
-  #GCC:*_*_*_CC_FLAGS    = -std=c99 -Wno-pointer-sign -Wno-unused-variable
+  DevMedia
+  NanoSvgLib

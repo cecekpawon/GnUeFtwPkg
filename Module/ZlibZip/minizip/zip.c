@@ -51,7 +51,7 @@
 #endif
 
 #ifndef Z_BUFSIZE
-#define Z_BUFSIZE (/*6*/4*1024) //(16384) // throw __chkstk
+#define Z_BUFSIZE (64*1024) //(16384) // throw __chkstk
 #endif
 
 #ifndef Z_MAXFILENAMEINZIP
