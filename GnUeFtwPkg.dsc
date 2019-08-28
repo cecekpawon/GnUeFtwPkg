@@ -10,7 +10,7 @@
   PLATFORM_VERSION        = 0.1
   SKUID_IDENTIFIER        = DEFAULT
   DSC_SPECIFICATION       = 0x00010006
-  SUPPORTED_ARCHITECTURES = X64 #IA32||ARM|AARCH64
+  SUPPORTED_ARCHITECTURES = X64 #|IA32|ARM|AARCH64
 
   DEFINE GLOBAL_OPTIONS =
 
@@ -43,7 +43,7 @@
   #
   #
   #
-  ZlibPkg|GnUeFtwPkg/Library/ZlibPkg/ZlibPkg.inf
+  ZlibLib|GnUeFtwPkg/Library/ZlibLib/ZlibLib.inf
 
 [Components]
   GnUeFtwPkg/Module/edid/edid.inf

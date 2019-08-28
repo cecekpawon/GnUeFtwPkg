@@ -5,11 +5,11 @@
 
 [Defines]
   INF_VERSION       = 0x00010005
-  BASE_NAME         = ZlibPkg
+  BASE_NAME         = ZlibLib
   FILE_GUID         = E37AA683-BA6A-468E-981C-47E98A8B50A6
   MODULE_TYPE       = BASE
   VERSION_STRING    = 1.0
-  LIBRARY_CLASS     = ZlibPkg
+  LIBRARY_CLASS     = ZlibLib
 
 [Sources]
   adler32.c
@@ -30,6 +30,7 @@
 
 [Packages]
   GnUeFtwPkg/GnUeFtwPkg.dec
+  GnUeFtwPkg/Library/ZlibLib/ZlibLib.dec
   MdePkg/MdePkg.dec
   StdLib/StdLib.dec
 

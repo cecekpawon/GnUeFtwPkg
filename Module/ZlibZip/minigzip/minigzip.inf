@@ -16,10 +16,10 @@
 
 [Packages]
   GnUeFtwPkg/GnUeFtwPkg.dec
-  GnUeFtwPkg/Library/ZlibPkg/ZlibPkg.dec
+  GnUeFtwPkg/Library/ZlibLib/ZlibLib.dec
   MdePkg/MdePkg.dec
   ShellPkg/ShellPkg.dec
   StdLib/StdLib.dec
 
 [LibraryClasses]
-  ZlibPkg
+  ZlibLib
