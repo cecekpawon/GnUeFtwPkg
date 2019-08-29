@@ -45,11 +45,14 @@
   #
   NanoSvgLib|GnUeFtwPkg/Library/NanoSvgLib/NanoSvgLib.inf
   ZlibLib|GnUeFtwPkg/Library/ZlibLib/ZlibLib.inf
+  WaveLib|AudioPkg/Library/WaveLib/WaveLib.inf          # Need AudioDxe
 
 [Components]
   GnUeFtwPkg/Module/edid/edid.inf
   GnUeFtwPkg/Module/hexdump/hexdump.inf
   GnUeFtwPkg/Module/HexDumpW/HexDumpW.inf
+  GnUeFtwPkg/Module/pocketmod/pocketmod_convert.inf
+  GnUeFtwPkg/Module/pocketmod/pocketmod_player.inf      # Need AudioDxe
   GnUeFtwPkg/Module/svg2png/svg2png.inf
   GnUeFtwPkg/Module/tree/tree.inf
   GnUeFtwPkg/Module/Treem/Treem.inf

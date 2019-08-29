@@ -10,6 +10,8 @@
 - [edid](Module/edid) BSD videomode
 - [hexdump](Module/hexdump) BSD EFI Toolkit
 - [HexDumpW](Module/HexDumpW) by William Ahern
+- [pocketmod - convert](Module/pocketmod) mod2wav converter by rombankzero
+- [pocketmod - player](Module/pocketmod) mod player
 - [svg2png](Module/svg2png) NanoSvgLib by Mikko Mononen
 - [tree](Module/tree) GNU by Steve Baker
 - [Treem](Module/Treem) (aka Tree Mini) by Steve Baker
