@@ -7,9 +7,9 @@
   cecekpawon - Thu Aug 29 17:13:41 2019
 **/
 
-#include "pocketmodcfg.h"
+#include "micromodcfg.h"
 
-#ifdef POCKETMOD_PLAYER
+#ifdef MICROMOD_PLAYER
 
 #include <Uefi.h>
 
@@ -26,7 +26,7 @@
 
 #include <Library/WaveLib.h>
 
-#include "pocketmod_player.h"
+#include "micromod_player.h"
 
 EFI_STATUS
 AudioPlayer (
@@ -261,4 +261,4 @@ DONE:
   return Status;
 }
 
-#endif
+#endif // MICROMOD_PLAYER

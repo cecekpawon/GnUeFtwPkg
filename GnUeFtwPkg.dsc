@@ -51,6 +51,8 @@
   GnUeFtwPkg/Module/edid/edid.inf
   GnUeFtwPkg/Module/hexdump/hexdump.inf
   GnUeFtwPkg/Module/HexDumpW/HexDumpW.inf
+  GnUeFtwPkg/Module/micromod/micromod_convert.inf
+  GnUeFtwPkg/Module/micromod/micromod_player.inf        # Need AudioDxe
   GnUeFtwPkg/Module/pocketmod/pocketmod_convert.inf
   GnUeFtwPkg/Module/pocketmod/pocketmod_player.inf      # Need AudioDxe
   GnUeFtwPkg/Module/svg2png/svg2png.inf

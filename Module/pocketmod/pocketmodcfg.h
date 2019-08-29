@@ -12,14 +12,14 @@
 //#define POCKETMOD_PLAYER
 
 #ifdef POCKETMOD_PLAYER
-    #ifdef POCKETMOD_ORI
-        #undef POCKETMOD_ORI
-    #endif
-    #ifdef POCKETMOD_SAVE_FILE
-        #undef POCKETMOD_SAVE_FILE
-    #endif
+  #ifdef POCKETMOD_ORI
+    #undef POCKETMOD_ORI
+  #endif // POCKETMOD_ORI
+  #ifdef POCKETMOD_SAVE_FILE
+    #undef POCKETMOD_SAVE_FILE
+  #endif // POCKETMOD_SAVE_FILE
 #else
-    //
-#endif
+  //
+#endif // POCKETMOD_PLAYER
 
-#endif
+#endif // POCKETMOD_CFG_H

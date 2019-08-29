@@ -12,8 +12,8 @@
   ENTRY_POINT       = ShellCEntryLib
 
 [Sources]
-  pocketmod_convert.c
   pocketmod.h
+  pocketmod_convert.c
 
 [Packages]
   GnUeFtwPkg/GnUeFtwPkg.dec

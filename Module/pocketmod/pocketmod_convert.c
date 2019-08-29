@@ -255,6 +255,7 @@ int main(int argc, char **argv)
         #else
 
           size_t wavebuffer_sizeblock = rendered_samples * sizeof(short[2]);
+
           wavebuffer = realloc(wavebuffer, wavebuffer_size + wavebuffer_sizeblock);
           memcpy(wavebuffer + wavebuffer_size, &output, wavebuffer_sizeblock);
           wavebuffer_size += wavebuffer_sizeblock;
@@ -312,7 +313,7 @@ int main(int argc, char **argv)
 
       #ifdef POCKETMOD_PLAYER
 
-        PocketModPlayer (wavebuffer, wavebuffer_size);
+        AudioPlayer (wavebuffer, wavebuffer_size);
 
       #endif // POCKETMOD_PLAYER
 

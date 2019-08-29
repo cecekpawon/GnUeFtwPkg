@@ -5,16 +5,16 @@
 
 [Defines]
   INF_VERSION       = 0x00010005
-  BASE_NAME         = pocketmod_player
-  FILE_GUID         = ED0E74C2-5510-4F7F-8CC8-492EDD87BA79
+  BASE_NAME         = micromod_player
+  FILE_GUID         = E998C5CC-58DE-403C-8E2E-84898350EB09
   MODULE_TYPE       = UEFI_APPLICATION
   VERSION_STRING    = 0.1
   ENTRY_POINT       = ShellCEntryLib
 
 [Sources]
-  pocketmod.h
-  pocketmod_convert.c
-  pocketmod_player.c
+  ibxm.c
+  micromod_convert.c
+  micromod_player.c
 
 [Packages]
   GnUeFtwPkg/GnUeFtwPkg.dec
@@ -31,5 +31,5 @@
   gEfiAudioIoProtocolGuid
 
 [BuildOptions]
-       *_*_*_CC_FLAGS   = -DPOCKETMOD_PLAYER
-  MSFT:*_*_*_CC_FLAGS   = /wd4244 /wd4457 /wd4706
+       *_*_*_CC_FLAGS   = -DMICROMOD_PLAYER
+  MSFT:*_*_*_CC_FLAGS   = /wd4244
