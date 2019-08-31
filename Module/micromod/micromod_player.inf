@@ -14,22 +14,17 @@
 [Sources]
   ibxm.c
   micromod_convert.c
-  micromod_player.c
 
 [Packages]
   GnUeFtwPkg/GnUeFtwPkg.dec
   MdePkg/MdePkg.dec
   ShellPkg/ShellPkg.dec
   StdLib/StdLib.dec
-  AudioPkg/AudioPkg.dec
 
 [LibraryClasses]
+  AudioPlayerLib
   DevMedia
-  WaveLib
-
-[Protocols]
-  gEfiAudioIoProtocolGuid
 
 [BuildOptions]
-       *_*_*_CC_FLAGS   = -DMICROMOD_PLAYER
+       *_*_*_CC_FLAGS   = -DMICROMOD_VERBOSE -DMICROMOD_PLAYER
   MSFT:*_*_*_CC_FLAGS   = /wd4244

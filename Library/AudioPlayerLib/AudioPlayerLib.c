@@ -7,10 +7,6 @@
   cecekpawon - Thu Aug 29 17:13:41 2019
 **/
 
-#include "pocketmodcfg.h"
-
-#ifdef POCKETMOD_PLAYER
-
 #include <Uefi.h>
 
 #include <Protocol/AudioIo.h>
@@ -24,14 +20,27 @@
 #include <Library/UefiLib.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
 
+#include <Library/AudioPlayerLib.h>
 #include <Library/WaveLib.h>
 
-#include "pocketmod_player.h"
+BOOLEAN   gPlaybackComplete = FALSE;
+
+STATIC
+VOID
+EFIAPI
+AudioPlayerAsyncCallback (
+  IN  EFI_AUDIO_IO_PROTOCOL   *AudioIo,
+  IN  VOID                    *Context
+  )
+{
+  gPlaybackComplete = TRUE;
+}
 
 EFI_STATUS
+EFIAPI
 AudioPlayer (
-  UINT8   *Bytes,
-  UINTN   BytesLength
+  IN  UINT8   *Bytes,
+  IN  UINTN   BytesLength
   )
 {
   EFI_STATUS                  Status;
@@ -51,6 +60,7 @@ AudioPlayer (
   EFI_DEVICE_PATH_PROTOCOL    *StoredDevicePath;
   UINTN                       StoredDevicePathSize;
   EFI_DEVICE_PATH_PROTOCOL    *DevicePath;
+  CHAR16                      *StoredDevicePathStr;
 
   // Output.
   UINTN                       OutputPortIndex;
@@ -63,9 +73,15 @@ AudioPlayer (
   // Read WAVE.
   WAVE_FILE_DATA              WaveData;
 
+  // Keystroke.
+  EFI_INPUT_KEY               Key;
+  UINTN                       EventIndex;
+
   EFI_GUID                    gBootChimeVendorVariableGuid = BOOT_CHIME_VENDOR_VARIABLE_GUID;
 
   //
+
+  StoredDevicePath = NULL;
 
   AudioIoHandles      = NULL;
   AudioIoHandleCount  = 0;
@@ -100,6 +116,7 @@ AudioPlayer (
   // Allocate space for device path.
   StoredDevicePath = AllocateZeroPool (StoredDevicePathSize);
   if (StoredDevicePath == NULL) {
+    Print (L"Cannot allocate StoredDevicePath.\n");
     Status = EFI_OUT_OF_RESOURCES;
     goto DONE;
   }
@@ -117,6 +134,12 @@ AudioPlayer (
     goto DONE;
   }
 
+  StoredDevicePathStr = ConvertDevicePathToText (StoredDevicePath, FALSE, FALSE);
+  if (StoredDevicePathStr != NULL) {
+    Print (L"Got stored %s: %s\n", BOOT_CHIME_VAR_DEVICE, StoredDevicePathStr);
+    FreePool (StoredDevicePathStr);
+  }
+
   // Get stored device index.
   OutputPortIndex     = 0;
   OutputPortIndexSize = sizeof (OutputPortIndex);
@@ -128,9 +151,11 @@ AudioPlayer (
                                 &OutputPortIndex
                                 );
   if (EFI_ERROR (Status)) {
-    Print (L"Failed to get %s. Run AudioPkg - BootChimeCfg first.\n", BOOT_CHIME_VAR_INDEX);
+    Print (L"Failed to get stored %s. Run AudioPkg - BootChimeCfg first.\n", BOOT_CHIME_VAR_INDEX);
     goto DONE;
   }
+
+  Print (L"Got stored %s: %d\n", BOOT_CHIME_VAR_INDEX, OutputPortIndex);
 
   // Get stored volume.
   OutputVolume      = 0;
@@ -143,9 +168,11 @@ AudioPlayer (
                               &OutputVolume
                               );
   if (EFI_ERROR (Status)) {
-    Print (L"Failed to get %s. Run AudioPkg - BootChimeCfg first.\n", BOOT_CHIME_VAR_VOLUME);
+    Print (L"Failed to get stored %s. Run AudioPkg - BootChimeCfg first.\n", BOOT_CHIME_VAR_VOLUME);
     goto DONE;
   }
+
+  Print (L"Got stored %s: %d\n", BOOT_CHIME_VAR_VOLUME, OutputVolume);
 
   FoundAudioIo = FALSE;
 
@@ -173,6 +200,7 @@ AudioPlayer (
 
   // If the Audio I/O variable is still null, we couldn't find it.
   if (!FoundAudioIo) {
+    Print (L"No matching AudioIo found.\n");
     Status = EFI_NOT_FOUND;
     goto DONE;
   }
@@ -180,6 +208,7 @@ AudioPlayer (
   // Read WAVE.
   Status = WaveGetFileData (Bytes, (UINT32)BytesLength, &WaveData);
   if (EFI_ERROR (Status)) {
+    Print (L"WaveGetFileData failed.\n");
     goto DONE;
   }
 
@@ -190,9 +219,6 @@ AudioPlayer (
             WaveData.Format->SamplesPerSec,
             WaveData.Format->BitsPerSample);
   Print (L"Samples length: %u bytes\n", WaveData.SamplesLength);
-
-  //Bits = EfiAudioIoBits16;
-  //Freq = EfiAudioIoFreq48kHz;
 
   switch (WaveData.Format->BitsPerSample) {
     case 16:
@@ -208,6 +234,7 @@ AudioPlayer (
       break;
 
     default:
+      Bits = 0;
       Status = EFI_UNSUPPORTED;
       break;
   }
@@ -227,6 +254,7 @@ AudioPlayer (
       break;
 
     default:
+      Freq = 0;
       Status = EFI_UNSUPPORTED;
       break;
   }
@@ -236,17 +264,41 @@ AudioPlayer (
     goto DONE;
   }
 
-  Status = AudioIo->SetupPlayback (AudioIo, i, OutputVolume, Freq, Bits, (UINT8)WaveData.Format->Channels);
+  Status = AudioIo->SetupPlayback (AudioIo, (UINT8)i, OutputVolume, Freq, Bits, (UINT8)WaveData.Format->Channels);
   if (EFI_ERROR (Status)) {
     Print (L"SetupPlayback failed.\n");
     goto DONE;
   }
 
-  Status = AudioIo->StartPlayback (AudioIo, WaveData.Samples, WaveData.SamplesLength, 0);
+  //Status = AudioIo->StartPlayback (AudioIo, WaveData.Samples, WaveData.SamplesLength, 0);
+  Status = AudioIo->StartPlaybackAsync (AudioIo, WaveData.Samples, WaveData.SamplesLength, 0, AudioPlayerAsyncCallback, NULL);
   if (EFI_ERROR (Status)) {
-    Print (L"SetupPlayback failed.\n");
+    Print (L"StartPlayback failed.\n");
     goto DONE;
   }
+
+  Print (L"Press ESC to exit.\n");
+
+  do {
+    gBS->WaitForEvent (1, &gST->ConIn->WaitForKey, &EventIndex);
+
+    Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
+    if (EFI_ERROR (Status)) {
+      if (Status == EFI_NOT_READY) {
+        continue;
+      }
+      break;
+    }
+
+    if (Key.ScanCode == SCAN_ESC) {
+      gPlaybackComplete = TRUE;
+      Status = AudioIo->StopPlayback (AudioIo);
+      Print (L"StopPlayback - %r.\n", Status);
+      break;
+    }
+  } while (!gPlaybackComplete);
+
+  Status = EFI_SUCCESS;
 
 DONE:
 
@@ -260,5 +312,3 @@ DONE:
 
   return Status;
 }
-
-#endif

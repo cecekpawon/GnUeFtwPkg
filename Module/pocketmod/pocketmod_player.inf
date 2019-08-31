@@ -14,22 +14,17 @@
 [Sources]
   pocketmod.h
   pocketmod_convert.c
-  pocketmod_player.c
 
 [Packages]
   GnUeFtwPkg/GnUeFtwPkg.dec
   MdePkg/MdePkg.dec
   ShellPkg/ShellPkg.dec
   StdLib/StdLib.dec
-  AudioPkg/AudioPkg.dec
 
 [LibraryClasses]
+  AudioPlayerLib
   DevMedia
-  WaveLib
-
-[Protocols]
-  gEfiAudioIoProtocolGuid
 
 [BuildOptions]
-       *_*_*_CC_FLAGS   = -DPOCKETMOD_PLAYER
+       *_*_*_CC_FLAGS   = -DPOCKETMOD_VERBOSE -DPOCKETMOD_PLAYER
   MSFT:*_*_*_CC_FLAGS   = /wd4244 /wd4457 /wd4706

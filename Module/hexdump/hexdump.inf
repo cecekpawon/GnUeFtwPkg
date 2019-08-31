@@ -33,5 +33,5 @@
 [BuildOptions]
   DEFINE  GLOBAL_OPTIONS  = -Dlint
 
+   GCC:*_*_*_CC_FLAGS     = $(GLOBAL_OPTIONS) -Wno-parentheses -Wno-pointer-sign
   MSFT:*_*_*_CC_FLAGS     = $(GLOBAL_OPTIONS) /wd4244 /wd4267 /wd4706
-  GCC:*_*_*_CC_FLAGS      = $(GLOBAL_OPTIONS) -Wno-parentheses -Wno-pointer-sign

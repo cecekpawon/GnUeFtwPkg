@@ -1,0 +1,26 @@
+#
+# GnUeFtwPkg - https://github.com/cecekpawon/GnUeFtwPkg
+# cecekpawon - Wed Aug 14 15:57:45 2019
+#
+
+[Defines]
+  INF_VERSION       = 0x00010005
+  BASE_NAME         = AudioPlayerLib
+  FILE_GUID         = D122A2C3-F444-46A0-9009-3ED9FC1D5420
+  MODULE_TYPE       = BASE
+  VERSION_STRING    = 1.0
+  LIBRARY_CLASS     = AudioPlayerLib
+
+[Sources]
+  AudioPlayerLib.c
+
+[Packages]
+  AudioPkg/AudioPkg.dec
+  GnUeFtwPkg/GnUeFtwPkg.dec
+  MdePkg/MdePkg.dec
+
+[LibraryClasses]
+  WaveLib
+
+[Protocols]
+  gEfiAudioIoProtocolGuid

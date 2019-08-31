@@ -15,11 +15,31 @@
 
 #include "ibxm.h"
 
+#define SAMPLE_RATE 44100
+
 #ifdef MICROMOD_PLAYER
 
-  #include "micromod_player.h"
+#include <Library/AudioPlayerLib.h>
 
-#endif
+#else
+
+static long write_file( char *filename, char *buffer, int length ) {
+  long count = -1;
+  FILE *file = fopen( filename, "wb" );
+
+  if( file != NULL ) {
+    count = (long)fwrite( buffer, 1, length, file );
+    fclose( file );
+  }
+  if( count < length ) {
+    fputs( strerror( errno ), stderr );
+    fputs( "\n", stderr );
+    count = -1;
+  }
+  return count;
+}
+
+#endif // MICROMOD_PLAYER
 
 static long read_file( char *file_name, void *buffer ) {
   long file_length = -1, bytes_read;
@@ -48,26 +68,6 @@ static long read_file( char *file_name, void *buffer ) {
   return file_length;
 }
 
-#ifdef MICROMOD_SAVE_FILE
-
-static long write_file( char *filename, char *buffer, int length ) {
-  long count = -1;
-  FILE *file = fopen( filename, "wb" );
-
-  if( file != NULL ) {
-    count = (long)fwrite( buffer, 1, length, file );
-    fclose( file );
-  }
-  if( count < length ) {
-    fputs( strerror( errno ), stderr );
-    fputs( "\n", stderr );
-    count = -1;
-  }
-  return count;
-}
-
-#endif
-
 static void write_int32le( int value, char *dest ) {
   dest[ 0 ] = value & 0xFF;
   dest[ 1 ] = ( value >> 8 ) & 0xFF;
@@ -78,7 +78,7 @@ static void write_int32le( int value, char *dest ) {
 static int xm_to_wav( struct module *module, char *wav ) {
   int mix_buf[ 16384 ];
   int idx, duration, samples, ampl, offset, length = 0;
-  struct replay *replay = new_replay( module, 48000, 0 );
+  struct replay *replay = new_replay( module, SAMPLE_RATE, 0 );
   if( replay ) {
     duration = replay_calculate_duration( replay );
     length = duration * 4 + 44;
@@ -89,8 +89,8 @@ static int xm_to_wav( struct module *module, char *wav ) {
       strcpy( &wav[ 8 ], "WAVEfmt " );
       write_int32le( 16, &wav[ 16 ] );
       write_int32le( 0x00020001, &wav[ 20 ] );
-      write_int32le( 48000, &wav[ 24 ] );
-      write_int32le( 48000 * 4, &wav[ 28 ] );
+      write_int32le( SAMPLE_RATE, &wav[ 24 ] );
+      write_int32le( SAMPLE_RATE * 4, &wav[ 28 ] );
       write_int32le( 0x00100004, &wav[ 32 ] );
       strcpy( &wav[ 36 ], "data" );
       write_int32le( duration * 4, &wav[ 40 ] );
@@ -123,18 +123,20 @@ int main( int argc, char **argv ) {
   char    message[ 64 ] = "";
   struct  data data;
   struct  module *module;
-  int     argcfix = 2;
+  int     argcfix = 3;
 
-  #ifdef MICROMOD_SAVE_FILE
+  #ifdef MICROMOD_PLAYER
 
-    argcfix = 3;
+    argcfix = 2;
 
-  #endif // MICROMOD_SAVE_FILE
+  #endif // MICROMOD_PLAYER
 
   result = EXIT_FAILURE;
 
+  printf( "%s\n", IBXM_VERSION );
+
   if( argc != argcfix ) {
-    fprintf( stderr, "%s\nUsage: %s input.[mod xm s3m] output.wav\n", IBXM_VERSION, argv[ 0 ] );
+    fprintf( stderr, "Usage: %s <infile> %s\n", argv[ 0 ], (argcfix == 2) ? "" : "<outfile>" );
   }
   else {
     /* Read module file.*/
@@ -158,21 +160,17 @@ int main( int argc, char **argv ) {
               if( output != NULL ) {
                 xm_to_wav( module, output );
 
-                #ifdef MICROMOD_SAVE_FILE
+                #ifdef MICROMOD_PLAYER
+
+                  AudioPlayer ((uint8_t *)output, length);
+
+                #else
 
                   if( write_file( argv[ 2 ], output, length ) > 0 ) {
                     result = EXIT_SUCCESS;
                   }
 
-                #else
-
-                  #ifdef MICROMOD_PLAYER
-
-                    AudioPlayer ((uint8_t *)output, length);
-
-                  #endif // MICROMOD_PLAYER
-
-                #endif // MICROMOD_SAVE_FILE
+                #endif // MICROMOD_PLAYER
 
                 free( output );
               }

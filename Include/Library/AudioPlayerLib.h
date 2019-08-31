@@ -7,8 +7,8 @@
   cecekpawon - Thu Aug 29 17:13:41 2019
 **/
 
-#ifndef POCKETMOD_PLAYER_H
-#define POCKETMOD_PLAYER_H
+#ifndef AUDIO_PLAYER_LIB_H
+#define AUDIO_PLAYER_LIB_H
 
 #define BOOT_CHIME_DEFAULT_VOLUME   EFI_AUDIO_IO_PROTOCOL_MAX_VOLUME
 
@@ -23,9 +23,10 @@
 #define BOOT_CHIME_VAR_VOLUME       (L"Volume")
 
 EFI_STATUS
+EFIAPI
 AudioPlayer (
-  UINT8   *Bytes,
-  UINTN   BytesLength
+  IN  UINT8   *Bytes,
+  IN  UINTN   BytesLength
   );
 
 #endif

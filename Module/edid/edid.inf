@@ -31,5 +31,3 @@
 
 [BuildOptions]
   MSFT:*_*_*_CC_FLAGS   = /W2
-  #MSFT:*_*_*_CC_FLAGS   = /wd4018 /wd4244 /wd4245 /wd4267 /wd4389 /wd4706
-  #GCC:*_*_*_CC_FLAGS    = -std=c99 -Wno-pointer-sign -Wno-unused-variable

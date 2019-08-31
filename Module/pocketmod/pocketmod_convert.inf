@@ -25,5 +25,5 @@
   DevMedia
 
 [BuildOptions]
-       *_*_*_CC_FLAGS   = -DPOCKETMOD_VERBOSE -DPOCKETMOD_SAVE_FILE
+       *_*_*_CC_FLAGS   = -DPOCKETMOD_VERBOSE
   MSFT:*_*_*_CC_FLAGS   = /wd4244 /wd4457 /wd4706
