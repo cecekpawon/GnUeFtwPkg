@@ -56,6 +56,7 @@
   GnUeFtwPkg/Module/micromod/micromod_player.inf                        # Need AudioDxe
   GnUeFtwPkg/Module/pocketmod/pocketmod_convert.inf
   GnUeFtwPkg/Module/pocketmod/pocketmod_player.inf                      # Need AudioDxe
+  GnUeFtwPkg/Module/Smbios2Bin/Smbios2Bin.inf
   GnUeFtwPkg/Module/svg2png/svg2png.inf
   GnUeFtwPkg/Module/tree/tree.inf
   GnUeFtwPkg/Module/Treem/Treem.inf
